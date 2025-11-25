@@ -193,32 +193,6 @@ class RSCoder(object):
         else:
             return ret
 
-    def decode_berlekamp_welch(self, r, xs, nostrip=False):
-        """Decode using the Berlekamp–Welch algorithm.
-
-        r: received symbols (string or list of ints)
-        xs: list of evaluation points (GF256int)
-        nostrip: if True, do not strip leading zeros from result
-        """
-        from polynomial import berlekamp_welch_decode
-        from ff import GF256int
-
-        ys = [GF256int(x) for x in r]        
-       
-        # Decode using BW
-        P = berlekamp_welch_decode(ys, self.k, xs=xs)
-
-        # Convert polynomial coefficients to string (ascending powers)
-        # Polynomial returns descending, so reverse
-        ret = "".join(chr(int(c)) for c in reversed(P.coefficients))
-
-        if nostrip:
-            return ret.rjust(self.k, "\0")
-        else:
-            return ret.lstrip("\0")
-
-
-
     def _syndromes(self, r):
         """Given the received codeword r in the form of a Polynomial object,
         computes the syndromes and returns the syndrome polynomial

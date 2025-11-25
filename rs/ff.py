@@ -84,6 +84,8 @@ class GF256int(int):
     __rmul__ = __mul__
 
     def __pow__(self, power):
+        if self == 0:
+            return GF256int(1) if power == 0 else GF256int(0)
         if isinstance(power, GF256int):
             raise TypeError("Raising a Field element to another Field element is not defined. power must be a regular integer")
         x = GF256int.logtable[self]
